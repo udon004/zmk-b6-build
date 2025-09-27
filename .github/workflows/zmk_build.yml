@@ -33,3 +33,10 @@ jobs:
 
       - name: Export PATH
         run: echo "PATH=/opt/toolchains/gnuarmemb/bin:$PATH" >> $GITHUB_ENV
+
+      - name: Initialize west and fetch modules
+        run: |
+          west init -l app
+          west update
+          west zephyr-export
+          pip3 install -r zephyr/scripts/requirements.txt
