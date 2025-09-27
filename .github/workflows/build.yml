@@ -38,3 +38,5 @@ jobs:
         with:
           name: zmk-firmware
           path: build/zephyr/zmk.uf2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
