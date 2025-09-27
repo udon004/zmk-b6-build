@@ -40,3 +40,13 @@ jobs:
           west update
           west zephyr-export
           pip3 install -r zephyr/scripts/requirements.txt
+
+      - name: Build firmware
+        run: |
+          west build -s app -b nrf52840dk_nrf52840 -p -- -DSHIELD=keychron_b6_us
+
+      - name: Upload UF2 artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: zmk-firmware
+          path: build/zephyr/zmk.uf2
