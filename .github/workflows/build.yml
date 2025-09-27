@@ -18,7 +18,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Install dependencies
+      - name: Install dependencies and toolchain
         run: |
           sudo apt update
           sudo apt install -y python3-pip ninja-build gperf \
@@ -28,6 +28,7 @@ jobs:
           pip3 install west
           wget https://developer.arm.com/-/media/Files/downloads/gnu-rm/10.3-2021.10/gcc-arm-none-eabi-10.3-2021.10-x86_64-linux.tar.bz2
           tar -xjf gcc-arm-none-eabi-10.3-2021.10-x86_64-linux.tar.bz2
+          sudo mkdir -p /opt/toolchains/gnuarmemb
           sudo mv gcc-arm-none-eabi-10.3-2021.10 /opt/toolchains/gnuarmemb
 
       - name: Initialize west and fetch modules
