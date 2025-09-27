@@ -32,7 +32,7 @@ jobs:
 
       - name: Build firmware
         run: |
-          west build -s app -b keychron -p -- -DSHIELD=keychron_b6_us
+          west build -s app -b nrf52840dk_nrf52840 -p -- -DSHIELD=keychron_b6_us
 
       - name: Upload UF2 artifact
         uses: actions/upload-artifact@v4
