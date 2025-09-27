@@ -1,39 +1,40 @@
-name: Build ZMK firmware
+name: Build ZMK firmware  # ワークフローの名前
 
 on:
-  workflow_dispatch:
+  workflow_dispatch:      # 手動実行を許可
 
 permissions:
-  contents: read
+  contents: read          # GitHubリポジトリの読み取り権限（v4で必須）
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest  # GitHubが提供するUbuntu環境で実行
+
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v3  # リポジトリの内容を取得
 
-      - name: Install dependencies
+      - name: 必要なパッケージをインストール
         run: |
           sudo apt update
           sudo apt install -y python3-pip ninja-build gperf \
             ccache dfu-util device-tree-compiler wget \
             python3-dev python3-setuptools python3-tk python3-wheel xz-utils file \
             make gcc gcc-multilib g++-multilib libsdl2-dev
-          pip3 install west
+          pip3 install west  # westツールをインストール
 
-      - name: Init west
+      - name: westの初期化と依存関係の取得
         run: |
           west init -l app
           west update
           west zephyr-export
           pip3 install -r zephyr/scripts/requirements.txt
 
-      - name: Build firmware
+      - name: ファームウェアをビルド
         run: |
           west build -b keychron -p -- -DSHIELD=keychron_b6_us
 
-      - name: Upload artifact
+      - name: UF2ファイルを成果物としてアップロード
         uses: actions/upload-artifact@v4
         with:
           name: zmk-firmware
