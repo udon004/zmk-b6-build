@@ -1,5 +1,0 @@
-/ {
-  keymap {
-    compatible = "zmk,keymap";
-  };
-};

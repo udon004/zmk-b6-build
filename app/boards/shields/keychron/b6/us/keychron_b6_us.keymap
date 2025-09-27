@@ -1,0 +1,8 @@
+/ {
+  keymap_0: keymap {
+    compatible = "zmk,keymap";
+
+    layout = < 0x00 0x01 ... 0x5B >;
+    bindings = < &kp ESC ... &kp KP_ENTER >;
+  };
+};
