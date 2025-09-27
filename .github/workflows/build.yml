@@ -4,6 +4,11 @@ on:
   workflow_dispatch:
 
 jobs:
+　env:
+  ZEPHYR_TOOLCHAIN_VARIANT: gnuarmemb
+  GNUARMEMB_TOOLCHAIN_PATH: /opt/toolchains/gnuarmemb
+  PATH: /opt/toolchains/gnuarmemb/bin:${{ env.PATH }}
+
   echo:
     runs-on: ubuntu-latest
     steps:
