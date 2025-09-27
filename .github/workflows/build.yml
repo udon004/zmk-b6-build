@@ -3,8 +3,48 @@ name: Build ZMK firmware
 on:
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
-  echo:
+  build:
     runs-on: ubuntu-latest
+
+    env:
+      ZEPHYR_TOOLCHAIN_VARIANT: gnuarmemb
+      GNUARMEMB_TOOLCHAIN_PATH: /opt/toolchains/gnuarmemb
+      PATH: /opt/toolchains/gnuarmemb/bin:${{ env.PATH }}
+
     steps:
-      - run: echo "ZMKビルド準備完了"
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install dependencies and toolchain
+        run: |
+          sudo apt update
+          sudo apt install -y python3-pip ninja-build gperf \
+            ccache dfu-util device-tree-compiler wget \
+            python3-dev python3-setuptools python3-tk python3-wheel xz-utils file \
+            make gcc gcc-multilib g++-multilib libsdl2-dev
+          pip3 install west
+          wget https://developer.arm.com/-/media/Files/downloads/gnu-rm/10.3-2021.10/gcc-arm-none-eabi-10.3-2021.10-x86_64-linux.tar.bz2
+          tar -xjf gcc-arm-none-eabi-10.3-2021.10-x86_64-linux.tar.bz2
+          sudo mkdir -p /opt/toolchains/gnuarmemb
+          sudo mv gcc-arm-none-eabi-10.3-2021.10/* /opt/toolchains/gnuarmemb/
+
+      - name: Initialize west and fetch modules
+        run: |
+          west init -l app
+          west update
+          west zephyr-export
+          pip3 install -r zephyr/scripts/requirements.txt
+
+      - name: Build firmware
+        run: |
+          west build -s app -b nrf52840dk_nrf52840 -p -- -DSHIELD=keychron_b6_us
+
+      - name: Upload UF2 artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: zmk-firmware
+          path: build/zephyr/zmk.uf2
