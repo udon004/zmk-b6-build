@@ -46,8 +46,12 @@ jobs:
         run: |
           west build -s app -b nrf52840dk_nrf52840 -p -- -DSHIELD=keychron_b6_us
 
-      - name: Upload UF2 artifact
+      - name: Upload firmware artifacts
         uses: actions/upload-artifact@v4
         with:
           name: zmk-firmware
-          path: app/build/zephyr/zmk.uf2
+          path: app/build/zephyr/*
+          if-no-files-found: ignore
+          compression-level: 6
+          overwrite: false
+          include-hidden-files: false
