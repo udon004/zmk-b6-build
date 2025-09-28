@@ -44,7 +44,7 @@ jobs:
 
       - name: Build firmware
         run: |
-          west build -s app -b nrf52840dk_nrf52840 -p -- -DSHIELD=keychron_b6_us
+          west build -s app -d app/build -b nrf52840dk_nrf52840 -p -- -DSHIELD=keychron_b6_us
 
       - name: Upload firmware artifacts
         uses: actions/upload-artifact@v4
