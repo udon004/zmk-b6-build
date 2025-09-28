@@ -1,13 +1,9 @@
-/*
- * Copyright (c) 2023 Rick Widen
- *
- * SPDX-License-Identifier: MIT
- */
 / {
     behaviors {
         kp: kp {
             compatible = "zmk,behavior-key-press";
             label = "KP";
+            #binding-cells = <1>;
         };
     };
 };
