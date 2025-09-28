@@ -55,3 +55,7 @@ jobs:
           compression-level: 6
           overwrite: false
           include-hidden-files: false
+      - name: Convert HEX to UF2
+        run: |
+          wget https://raw.githubusercontent.com/Microsoft/uf2/master/utils/uf2conv.py
+          python3 uf2conv.py -c -f 0xADA52840 -o app/build/zephyr/zmk.uf2 app/build/zephyr/zmk.hex
